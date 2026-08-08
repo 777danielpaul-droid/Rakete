@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
+import RocketImg from './Rocket.png'
 
 function pulse(t) {
   return 0.5 + 0.5 * Math.sin(t * 3.0) + 0.25 * Math.sin(t * 7.2 + 1.0) + 0.15 * Math.sin(t * 11.5 + 2.3)
@@ -221,39 +222,14 @@ export default function RocketBeam() {
 
   useEffect(() => {
     const canvas = canvasRef.current
-    const container = containerRef.current
+    if (!canvas) return
 
-    if (!canvas || !container) return
-
-    const resizeObserver = new ResizeObserver(() => {
-      const rect = container.getBoundingClientRect()
-      canvas.width = rect.width
-      canvas.height = rect.height
-      const ctx = canvas.getContext('2d')
-      ctx.fillStyle = '#010108'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-      drawNozzle(ctx, canvas.width, timeRef.current)
-    })
-
-    resizeObserver.observe(container)
-
-    function init() {
-      const rect = container.getBoundingClientRect()
-      canvas.width = rect.width
-      canvas.height = rect.height
-      const ctx = canvas.getContext('2d')
-      ctx.fillStyle = '#010108'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-      drawNozzle(ctx, canvas.width, timeRef.current)
-    }
-
-    init()
-    window.addEventListener('resize', init)
-
-    return () => {
-      resizeObserver.disconnect()
-      window.removeEventListener('resize', init)
-    }
+    canvas.width = 100
+    canvas.height = 400
+    const ctx = canvas.getContext('2d')
+    ctx.fillStyle = 'transparent'
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    drawNozzle(ctx, canvas.width, timeRef.current)
   }, [drawNozzle])
 
   useEffect(() => {
@@ -275,19 +251,17 @@ export default function RocketBeam() {
   }, [running, animate, drawNozzle])
 
   return (
-    <div className="relative w-full max-w-xl mx-auto h-[650px] bg-[#010108] overflow-visible rounded-xl flex flex-col items-center">
-      <div
-        ref={containerRef}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-        style={{
-          width: '100%',
-          height: '100%',
-          transform: 'rotate(-25deg)',
-          transformOrigin: 'center top'
-        }}
-      >
-        <canvas ref={canvasRef} className="w-full h-full block" />
-      </div>
+    <div className="relative w-full max-w-[1100px] mx-auto h-[900px] bg-[#010108]">
+      <img
+        src={RocketImg}
+        alt="Rocket"
+        className="absolute top-[30px] left-1/2 -translate-x-1/2 w-[500px] h-auto"
+      />
+      <canvas
+        ref={canvasRef}
+        className="absolute bottom-[200px] right-[-100px] block w-[120px] h-[500px]"
+        style={{ transform: 'rotate(-60deg)' }}
+      />
       <button
         onClick={() => setRunning(!running)}
         className="absolute bottom-4 left-1/2 -translate-x-1/2 px-8 py-2.5 rounded-full text-sm text-[#c0a0ff] border border-[rgba(140,100,255,0.4)] backdrop-blur-md transition-all duration-300 hover:border-[rgba(160,120,255,0.6)] cursor-pointer"
