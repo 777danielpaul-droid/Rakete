@@ -157,15 +157,15 @@ export default function RocketBeam() {
 
   const drawBeam = useCallback((ctx, W, H, t) => {
     drawSingleBeam(ctx, W, H, t, 0, 0)      // Strahl 1: zentriert
-    drawSingleBeam(ctx, W, H, t, 10, 5)      // Strahl 2: 10px rechts, 5px runter (+2px Abstand)
+    drawSingleBeam(ctx, W, H, t, 15, 15)     // Strahl 2: 15px rechts, 15px runter (+5px Abstand)
   }, [])
 
   const spawnParticles = useCallback((W) => {
     if (!runningRef.current) return
     const cx = W / 2
     const ny = 49
-    const STRAHL_2_X = 10  // ← 10px rechts (+2px Abstand)
-    const STRAHL_2_Y = 5   // ← synchron mit drawSingleBeam
+    const STRAHL_2_X = 15  // ← synchron mit drawSingleBeam
+    const STRAHL_2_Y = 15  // ← synchron mit drawSingleBeam
 
     // Strahl 1 (zentriert)
     for (let i = 0; i < 4; i++) {
