@@ -92,17 +92,7 @@ export default function RocketBeam() {
       ctx.fillRect(cx - glowR, ny - glowR, glowR * 2, glowR * 2)
     }
 
-    ctx.beginPath()
-    ctx.moveTo(cx - 10, ny - 12)
-    ctx.lineTo(cx + 10, ny - 12)
-    ctx.lineTo(cx + 7, ny + 4)
-    ctx.lineTo(cx - 7, ny + 4)
-    ctx.closePath()
-    ctx.strokeStyle = runningRef.current
-      ? `rgba(180, 130, 255, ${0.5 + 0.3 * pulse(t)})`
-      : 'rgba(90, 70, 170, 0.25)'
-    ctx.lineWidth = 1.2
-    ctx.stroke()
+    // Nozzle rectangle removed — only glow and beam remain
   }, [])
 
   const drawBeam = useCallback((ctx, W, H, t) => {
