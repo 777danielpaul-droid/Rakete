@@ -95,9 +95,9 @@ export default function RocketBeam() {
     // Nozzle rectangle removed — only glow and beam remain
   }, [])
 
-  const drawBeam = useCallback((ctx, W, H, t) => {
+  const drawSingleBeam = (ctx, W, H, t, offsetX = 0) => {
     if (!runningRef.current) return
-    const cx = W / 2
+    const cx = W / 2 + offsetX
     const ny = 49
     const p = pulse(t)
     const f = flicker(t)
@@ -153,22 +153,44 @@ export default function RocketBeam() {
     ctx.closePath()
     ctx.fillStyle = coreGrad
     ctx.fill()
-  }, [])
+  }
+
+  const drawBeam = useCallback((ctx, W, H, t) => {
+    drawSingleBeam(ctx, W, H, t, 0)
+    drawSingleBeam(ctx, W, H, t, 12)  // 12px Abstand statt 6
+  }, [drawSingleBeam])
 
   const spawnParticles = useCallback((W) => {
     if (!runningRef.current) return
     const cx = W / 2
     const ny = 49
+    const offsetX = 12
 
+    // Strahl 1 (zentriert)
     for (let i = 0; i < 4; i++) {
       beamParticlesRef.current.push(
         new Particle(cx + (Math.random() - 0.5) * 3, ny + Math.random() * 2, true, timeRef.current)
       )
     }
 
+    // Strahl 2 (rechts versetzt)
+    for (let i = 0; i < 4; i++) {
+      beamParticlesRef.current.push(
+        new Particle(cx + offsetX + (Math.random() - 0.5) * 3, ny + Math.random() * 2, true, timeRef.current)
+      )
+    }
+
+    // Outer particles (zentriert)
     for (let i = 0; i < 3; i++) {
       particlesRef.current.push(
         new Particle(cx + (Math.random() - 0.5) * 5, ny + 5 + Math.random() * 10, false, timeRef.current)
+      )
+    }
+
+    // Outer particles (rechts versetzt)
+    for (let i = 0; i < 3; i++) {
+      particlesRef.current.push(
+        new Particle(cx + offsetX + (Math.random() - 0.5) * 5, ny + 5 + Math.random() * 10, false, timeRef.current)
       )
     }
   }, [])
@@ -247,7 +269,7 @@ export default function RocketBeam() {
       />
       <canvas
         ref={canvasRef}
-        className="absolute top-[70px] left-[calc(50%+220px)] -translate-x-1/2 block w-[120px] h-[500px]"
+        className="absolute top-[70px] left-[calc(50%+220px)] -translate-x-1/2 block w-[140px] h-[500px]"
         style={{ transform: 'rotate(-60deg)', background: 'transparent' }}
       />
       <button
