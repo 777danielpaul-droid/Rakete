@@ -157,15 +157,15 @@ export default function RocketBeam() {
 
   const drawBeam = useCallback((ctx, W, H, t) => {
     drawSingleBeam(ctx, W, H, t, 0, 0)      // Strahl 1: zentriert
-    drawSingleBeam(ctx, W, H, t, 23, 5)      // Strahl 2: 23px rechts, 5px runter
+    drawSingleBeam(ctx, W, H, t, 10, 5)      // Strahl 2: 10px rechts, 5px runter (+2px Abstand)
   }, [])
 
   const spawnParticles = useCallback((W) => {
     if (!runningRef.current) return
     const cx = W / 2
     const ny = 49
-    const offsetX = 23  // ← 23px rechts (synchron mit drawSingleBeam)
-    const offsetY = 5   // ← 5px runter (synchron mit drawSingleBeam)
+    const STRAHL_2_X = 10  // ← 10px rechts (+2px Abstand)
+    const STRAHL_2_Y = 5   // ← synchron mit drawSingleBeam
 
     // Strahl 1 (zentriert)
     for (let i = 0; i < 4; i++) {
@@ -174,10 +174,10 @@ export default function RocketBeam() {
       )
     }
 
-    // Strahl 2 (rechts versetzt + runter)
+    // Strahl 2 (8px rechts, 5px runter)
     for (let i = 0; i < 4; i++) {
       beamParticlesRef.current.push(
-        new Particle(cx + offsetX + (Math.random() - 0.5) * 3, ny + offsetY + Math.random() * 2, true, timeRef.current)
+        new Particle(cx + STRAHL_2_X + (Math.random() - 0.5) * 3, ny + STRAHL_2_Y + Math.random() * 2, true, timeRef.current)
       )
     }
 
@@ -188,10 +188,10 @@ export default function RocketBeam() {
       )
     }
 
-    // Outer particles (rechts versetzt + runter)
+    // Outer particles (8px rechts, 5px runter)
     for (let i = 0; i < 3; i++) {
       particlesRef.current.push(
-        new Particle(cx + offsetX + (Math.random() - 0.5) * 5, ny + offsetY + 5 + Math.random() * 10, false, timeRef.current)
+        new Particle(cx + STRAHL_2_X + (Math.random() - 0.5) * 5, ny + STRAHL_2_Y + 5 + Math.random() * 10, false, timeRef.current)
       )
     }
   }, [])
@@ -270,7 +270,7 @@ export default function RocketBeam() {
       />
       <canvas
         ref={canvasRef}
-        className="absolute top-[60px] left-[calc(50%+190px)] -translate-x-1/2 block w-[140px] h-[500px]"
+        className="absolute top-[75px] left-[calc(50%+205px)] -translate-x-1/2 block w-[140px] h-[500px]"
         style={{ transform: 'rotate(-60deg)', background: 'transparent' }}
       />
       <button
