@@ -190,8 +190,7 @@ export default function RocketBeam() {
     const W = canvas.width
     const H = canvas.height
 
-    ctx.fillStyle = 'rgba(1, 1, 8, 0.12)'
-    ctx.fillRect(0, 0, W, H)
+    ctx.clearRect(0, 0, W, H)
 
     timeRef.current += 0.016
     const t = timeRef.current
@@ -241,8 +240,7 @@ export default function RocketBeam() {
       const canvas = canvasRef.current
       if (!canvas) return
       const ctx = canvas.getContext('2d')
-      ctx.fillStyle = '#010108'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
       drawNozzle(ctx, canvas.width, timeRef.current)
     }
     return () => {
@@ -251,7 +249,7 @@ export default function RocketBeam() {
   }, [running, animate, drawNozzle])
 
   return (
-    <div className="relative w-full max-w-[1100px] mx-auto h-[900px] bg-[#010108]">
+    <div className="relative w-full max-w-[1100px] mx-auto h-[900px]">
       <img
         src={RocketImg}
         alt="Rocket"
@@ -259,8 +257,8 @@ export default function RocketBeam() {
       />
       <canvas
         ref={canvasRef}
-        className="absolute bottom-[100px] left-1/2 -translate-x-1/2 block w-[120px] h-[500px]"
-        style={{ transform: 'rotate(-60deg)' }}
+        className="absolute top-[70px] left-[calc(50%+220px)] -translate-x-1/2 block w-[120px] h-[500px]"
+        style={{ transform: 'rotate(-60deg)', background: 'transparent' }}
       />
       <button
         onClick={() => setRunning(!running)}
