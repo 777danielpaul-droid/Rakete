@@ -77,7 +77,7 @@ export default function RocketBeam() {
 
   const drawNozzle = useCallback((ctx, W, t) => {
     const cx = W / 2
-    const ny = 45
+    const ny = 120  // ← noch tiefer (85 → 120)
 
     if (runningRef.current) {
       const p = pulse(t)
@@ -95,10 +95,10 @@ export default function RocketBeam() {
     // Nozzle rectangle removed — only glow and beam remain
   }, [])
 
-  const drawSingleBeam = (ctx, W, H, t, offsetX = 0) => {
+  const drawSingleBeam = (ctx, W, H, t, offsetX = 0, offsetY = 0) => {
     if (!runningRef.current) return
     const cx = W / 2 + offsetX
-    const ny = 49
+    const ny = 49 + offsetY
     const p = pulse(t)
     const f = flicker(t)
 
@@ -156,15 +156,16 @@ export default function RocketBeam() {
   }
 
   const drawBeam = useCallback((ctx, W, H, t) => {
-    drawSingleBeam(ctx, W, H, t, 0)
-    drawSingleBeam(ctx, W, H, t, 12)  // 12px Abstand statt 6
-  }, [drawSingleBeam])
+    drawSingleBeam(ctx, W, H, t, 0, 0)      // Strahl 1: zentriert
+    drawSingleBeam(ctx, W, H, t, 12, 20)    // Strahl 2: 12px rechts, 20px runter
+  }, [])
 
   const spawnParticles = useCallback((W) => {
     if (!runningRef.current) return
     const cx = W / 2
     const ny = 49
     const offsetX = 12
+    const offsetY = 30  // ← 10px mehr runter
 
     // Strahl 1 (zentriert)
     for (let i = 0; i < 4; i++) {
@@ -173,10 +174,10 @@ export default function RocketBeam() {
       )
     }
 
-    // Strahl 2 (rechts versetzt)
+    // Strahl 2 (rechts versetzt + runter)
     for (let i = 0; i < 4; i++) {
       beamParticlesRef.current.push(
-        new Particle(cx + offsetX + (Math.random() - 0.5) * 3, ny + Math.random() * 2, true, timeRef.current)
+        new Particle(cx + offsetX + (Math.random() - 0.5) * 3, ny + offsetY + Math.random() * 2, true, timeRef.current)
       )
     }
 
@@ -187,10 +188,10 @@ export default function RocketBeam() {
       )
     }
 
-    // Outer particles (rechts versetzt)
+    // Outer particles (rechts versetzt + runter)
     for (let i = 0; i < 3; i++) {
       particlesRef.current.push(
-        new Particle(cx + offsetX + (Math.random() - 0.5) * 5, ny + 5 + Math.random() * 10, false, timeRef.current)
+        new Particle(cx + offsetX + (Math.random() - 0.5) * 5, ny + offsetY + 5 + Math.random() * 10, false, timeRef.current)
       )
     }
   }, [])
@@ -269,7 +270,7 @@ export default function RocketBeam() {
       />
       <canvas
         ref={canvasRef}
-        className="absolute top-[70px] left-[calc(50%+220px)] -translate-x-1/2 block w-[140px] h-[500px]"
+        className="absolute top-[60px] left-[calc(50%+190px)] -translate-x-1/2 block w-[140px] h-[500px]"
         style={{ transform: 'rotate(-60deg)', background: 'transparent' }}
       />
       <button
