@@ -259,7 +259,7 @@ export default function RocketBeam() {
       />
       <canvas
         ref={canvasRef}
-        className="absolute bottom-[200px] right-[-100px] block w-[120px] h-[500px]"
+        className="absolute bottom-[100px] left-1/2 -translate-x-1/2 block w-[120px] h-[500px]"
         style={{ transform: 'rotate(-60deg)' }}
       />
       <button
